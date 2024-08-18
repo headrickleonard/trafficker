@@ -6,7 +6,10 @@ function HomePage() {
   return (
     <div>
       {/* <NavBar /> */}
-      <div className="w-full h-[30rem] flex items-center justify-center border border-neutral-200 my-12 py-4 px-2">
+      <h1 className="text-center text-2xl font-semibold  top-0 my-2">
+        Traffic Frequency Graph
+      </h1>
+      <div className="w-full h-[32rem] flex flex-col items-center justify-center border border-neutral-200  px-2">
         <TrafficRecords />
       </div>
     </div>

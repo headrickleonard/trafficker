@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  ReferenceLine,
 } from "recharts";
 
 const TrafficRecordsChart = () => {
@@ -47,7 +48,7 @@ const TrafficRecordsChart = () => {
     const url = "http://192.168.1.172:8087/api/v1/traffic-records/filter";
     try {
       const response = await axios.get(url);
-      console.log("the response is:", response.data);
+      // console.log("the response is:", response.data);
       return response.data.data;
     } catch (error) {
       console.error("There was an error fetching the data!", error);
@@ -101,9 +102,8 @@ const TrafficRecordsChart = () => {
 
       setData(chartData);
     };
-
     processData();
-  }, []);
+  }, [categories]);
 
   return (
     <ResponsiveContainer
@@ -112,15 +112,11 @@ const TrafficRecordsChart = () => {
       style={{ marginTop: "10rem" }}
     >
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="1 1" />
         {/* <XAxis dataKey="time" />
         <YAxis /> */}
         <XAxis dataKey="time">
-          <label
-            value="time slots"
-            offset={0}
-            position="insideBottom"
-          />
+          <label value="time slots" offset={12} position="insideBottom" />
         </XAxis>
         <YAxis
           label={{
@@ -130,17 +126,30 @@ const TrafficRecordsChart = () => {
             textAnchor: "middle",
           }}
         />
-        <Tooltip />
-        <Legend />
-        {/* Render a line for each car category */}
+        <Tooltip wrapperStyle={{backdropFilter:"initial",background:"#e6e6e6"}} separator=":" itemStyle={{fontSize:"1em"}} />
+        <Legend
+          alphabetic={true}
+          dominantBaseline={12}
+          iconType="rect"
+          verticalAlign="top"
+          // height={36}
+          margin={{bottom: 2,}}
+        />
+
         {categories.map((category, index) => (
           <Line
             key={category}
             type="monotone"
             dataKey={category}
             stroke={getColor(index)}
+            strokeDasharray="1 1"
+            strokeOpacity={0.8}
+             strokeDashoffset={2}
             strokeWidth={2}
             dot={false}
+            activeDot={{ r: 4 }}
+            animateNewValues={false}
+            connectNulls
           />
         ))}
       </LineChart>
@@ -150,13 +159,35 @@ const TrafficRecordsChart = () => {
 
 // Function to get color for each line
 const getColor = (index) => {
+  // const colors = [
+  //   "#8884d8",
+  //   "#82ca9d",
+  //   "#ffc658",
+  //   "#ff7300",
+  //   "#413ea0",
+  //   "#d0ed57",
+  //   "#75150e",
+  //   "#750e66",
+  //   "#e8ac13",
+  //   "#0f0b33"
+
+  // ];
   const colors = [
-    "#8884d8",
-    "#82ca9d",
-    "#ffc658",
-    "#ff7300",
-    "#413ea0",
-    "#d0ed57",
+    '#3498DB',  // Blue
+    '#E74C3C',  // Red
+    '#2ECC71',  // Green
+    '#9B59B6',  // Purple
+    '#F1C40F',  // Yellow
+    '#7F8C8D',  // Gray
+    '#16A085',  // Teal
+    '#D35400',  // Orange
+    '#C0392B',  // Crimson
+    '#2980B9',  // Cobalt Blue
+    '#B2BEB5',  // Light Gray
+    '#8592A6',  // Slate Gray
+    '#E67E22',  // Carrot Orange
+    '#94B49F',  // Mint Green
+    '#F0B27A'   // Peach
   ];
   return colors[index % colors.length];
 };
